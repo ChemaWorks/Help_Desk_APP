@@ -2,7 +2,6 @@ package org.nexus.eduhelp.rest;
 
 import com.google.gson.Gson;
 import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -22,11 +21,11 @@ public class RestTicket {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("register_ticket")
-    public Response save(@FormParam("titulo") String titulo, 
-                         @FormParam("descripcion") String descripcion,
-                         @FormParam("prioridad") String prioridad,
-                         @FormParam("estado") String estado,
-                         @FormParam("idUsuario") int idUsuario) {
+    public Response save(@QueryParam("titulo") String titulo, 
+                         @QueryParam("descripcion") String descripcion,
+                         @QueryParam("prioridad") String prioridad,
+                         @QueryParam("estado") String estado,
+                         @QueryParam("idUsuario") int idUsuario) {
         
         String out = "";
         
@@ -51,12 +50,12 @@ public class RestTicket {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("update_ticket")
-    public Response update(@FormParam("idTicket") int idTicket, 
-                           @FormParam("titulo") String titulo, 
-                           @FormParam("descripcion") String descripcion,
-                           @FormParam("prioridad") String prioridad,
-                           @FormParam("estado") String estado,
-                           @FormParam("idUsuario") int idUsuario) {
+    public Response update(@QueryParam("idTicket") int idTicket, 
+                           @QueryParam("titulo") String titulo, 
+                           @QueryParam("descripcion") String descripcion,
+                           @QueryParam("prioridad") String prioridad,
+                           @QueryParam("estado") String estado,
+                           @QueryParam("idUsuario") int idUsuario) {
         
         String out = "";
         
