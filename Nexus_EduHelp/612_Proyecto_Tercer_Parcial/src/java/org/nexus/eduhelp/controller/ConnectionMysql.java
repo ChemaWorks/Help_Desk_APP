@@ -9,7 +9,7 @@ public class ConnectionMysql {
     
     public Connection open() {
         String user = "root";
-        String password = "Moises2022";
+        String password = "Admin123";
         String url = "jdbc:mysql://127.0.0.1:3306/HELPDESK_SALLE";
         String parametros = "?useSSL=false&useUnicode=true&characterEncoding=utf-8";
         

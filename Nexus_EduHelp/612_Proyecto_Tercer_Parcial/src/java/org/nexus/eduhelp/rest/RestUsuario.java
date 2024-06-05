@@ -21,12 +21,12 @@ public class RestUsuario {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("register_user")
-    public Response save(@FormParam("nombre") String nombre, 
-                         @FormParam("apellido") String apellido,
-                         @FormParam("correo") String correo,
-                         @FormParam("tipo") String tipo,
-                         @FormParam("contraseña") String contraseña,
-                         @FormParam("matricula")int matricula){
+    public Response save(@QueryParam("nombre") String nombre, 
+                         @QueryParam("apellido") String apellido,
+                         @QueryParam("correo") String correo,
+                         @QueryParam("tipo") String tipo,
+                         @QueryParam("contraseña") String contraseña,
+                         @QueryParam("matricula") int matricula){
         
         String out = "";
         
@@ -47,17 +47,16 @@ public class RestUsuario {
         return Response.ok(out).build();
     }
     
-    
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("update_user")
-    public Response update(@FormParam("idUsuario") int idUsuario, 
-                           @FormParam("nombre") String nombre, 
-                           @FormParam("apellido") String apellido,
-                           @FormParam("correo") String correo,
-                           @FormParam("tipo") String tipo,
-                           @FormParam("contraseña") String contraseña,
-                           @FormParam("matricula") int matricula) {
+    public Response update(@QueryParam("idUsuario") int idUsuario, 
+                           @QueryParam("nombre") String nombre, 
+                           @QueryParam("apellido") String apellido,
+                           @QueryParam("correo") String correo,
+                           @QueryParam("tipo") String tipo,
+                           @QueryParam("contraseña") String contraseña,
+                           @QueryParam("matricula") int matricula) {
         
         String out = "";
         
@@ -141,37 +140,37 @@ public class RestUsuario {
         return Response.ok(out).build();
     }
     
-@GET
-@Produces(MediaType.APPLICATION_JSON)
-@Path("login")
-public Response login(@QueryParam("correo") String correo,
-                      @QueryParam("contraseña") String contraseña) {
-    String out = "";
-    try {
-        if (correo == null || correo.isEmpty() || contraseña == null || contraseña.isEmpty()) {
-            out = "{\"error\" : \"Correo y contraseña son requeridos\"}";
-            return Response.status(Response.Status.BAD_REQUEST).entity(out).build();
-        }
-
-        System.out.println("Correo recibido: " + correo);
-        System.out.println("Contraseña recibida: " + contraseña);
-
-        ControllerUsuario cu = new ControllerUsuario();
-        List<Usuario> usuarios = cu.get_all_users();
-
-        for (Usuario usuario : usuarios) {
-            System.out.println("Comparando con usuario: " + usuario.getCorreo());
-            if (usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(contraseña)) {
-                out = String.format("{\"idUsuario\" : \"%d\"}", usuario.getIdUsuario());
-                return Response.ok(out).build();
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("login")
+    public Response login(@QueryParam("correo") String correo,
+                          @QueryParam("contraseña") String contraseña) {
+        String out = "";
+        try {
+            if (correo == null || correo.isEmpty() || contraseña == null || contraseña.isEmpty()) {
+                out = "{\"error\" : \"Correo y contraseña son requeridos\"}";
+                return Response.status(Response.Status.BAD_REQUEST).entity(out).build();
             }
-        }
 
-        out = "{\"error\" : \"Credenciales inválidas\"}";
-    } catch (Exception e) {
-        e.printStackTrace();
-        out = String.format("{\"error\" : \"%s\"}", e.getMessage());
+            System.out.println("Correo recibido: " + correo);
+            System.out.println("Contraseña recibida: " + contraseña);
+
+            ControllerUsuario cu = new ControllerUsuario();
+            List<Usuario> usuarios = cu.get_all_users();
+
+            for (Usuario usuario : usuarios) {
+                System.out.println("Comparando con usuario: " + usuario.getCorreo());
+                if (usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(contraseña)) {
+                    out = String.format("{\"idUsuario\" : \"%d\"}", usuario.getIdUsuario());
+                    return Response.ok(out).build();
+                }
+            }
+
+            out = "{\"error\" : \"Credenciales inválidas\"}";
+        } catch (Exception e) {
+            e.printStackTrace();
+            out = String.format("{\"error\" : \"%s\"}", e.getMessage());
+        }
+        return Response.status(Response.Status.UNAUTHORIZED).entity(out).build();
     }
-    return Response.status(Response.Status.UNAUTHORIZED).entity(out).build();
-}
 }
