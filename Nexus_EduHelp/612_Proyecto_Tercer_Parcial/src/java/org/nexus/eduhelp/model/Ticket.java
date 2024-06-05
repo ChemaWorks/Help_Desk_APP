@@ -6,22 +6,30 @@ public class Ticket {
     private int idTicket;
     private String titulo;
     private String descripcion;
+    private String ubicacion;
+    private String Categoria;
     private String prioridad;
-    private String estado;
+    private String Estado;
     private Timestamp fechaCreacion;
     private Timestamp fechaActualizacion;
-    private int idUsuario;
+    private int Id_Alumno;
+    private int Id_Tecnico;
 
-    public Ticket(int idTicket, String titulo, String descripcion, String prioridad, String estado, Timestamp fechaCreacion, Timestamp fechaActualizacion, int idUsuario) {
+    public Ticket(int idTicket, String titulo, String descripcion, String ubicacion, String Categoria, String prioridad, String Estado, Timestamp fechaCreacion, Timestamp fechaActualizacion, int Id_Alumno, int Id_Tecnico) {
         this.idTicket = idTicket;
         this.titulo = titulo;
         this.descripcion = descripcion;
+        this.ubicacion = ubicacion;
+        this.Categoria = Categoria;
         this.prioridad = prioridad;
-        this.estado = estado;
+        this.Estado = Estado;
         this.fechaCreacion = fechaCreacion;
         this.fechaActualizacion = fechaActualizacion;
-        this.idUsuario = idUsuario;
+        this.Id_Alumno = Id_Alumno;
+        this.Id_Tecnico = Id_Tecnico;
     }
+
+   
 
     public Ticket() {
     }
@@ -59,11 +67,11 @@ public class Ticket {
     }
 
     public String getEstado() {
-        return estado;
+        return Estado;
     }
 
     public void setEstado(String estado) {
-        this.estado = estado;
+        this.Estado = estado;
     }
 
     public Timestamp getFechaCreacion() {
@@ -82,11 +90,38 @@ public class Ticket {
         this.fechaActualizacion = fechaActualizacion;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public int getId_Alumno() {
+        return Id_Alumno;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setId_Alumno(int Id_Alumno) {
+        this.Id_Alumno = Id_Alumno;
     }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public String getCategoria() {
+        return Categoria;
+    }
+
+    public void setCategoria(String Categoria) {
+        this.Categoria = Categoria;
+    }
+
+    public int getId_Tecnico() {
+        return Id_Tecnico;
+    }
+
+    public void setId_Tecnico(int Id_Tecnico) {
+        this.Id_Tecnico = Id_Tecnico;
+    }
+    
+    
+    
 }

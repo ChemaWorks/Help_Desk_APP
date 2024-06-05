@@ -17,63 +17,68 @@ import org.nexus.eduhelp.model.Ticket;
 
 @Path("ticket")
 public class RestTicket {
-    
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("register_ticket")
-    public Response save(@QueryParam("titulo") String titulo, 
+    public Response save(@QueryParam("titulo") String titulo,
                          @QueryParam("descripcion") String descripcion,
+                         @QueryParam("ubicacion") String ubicacion,
+                         @QueryParam("categoria") String categoria,
                          @QueryParam("prioridad") String prioridad,
                          @QueryParam("estado") String estado,
-                         @QueryParam("idUsuario") int idUsuario) {
-        
+                         @QueryParam("idAlumno") int idAlumno) {
+
         String out = "";
-        
+
         try {
             Timestamp fechaCreacion = new Timestamp(System.currentTimeMillis());
             Timestamp fechaActualizacion = fechaCreacion;
-            
-            Ticket ticket = new Ticket(0, titulo, descripcion, prioridad, estado, fechaCreacion, fechaActualizacion, idUsuario);
+
+            Ticket ticket = new Ticket(0, titulo, descripcion, ubicacion, categoria, prioridad, estado, fechaCreacion, fechaActualizacion, idAlumno, 0);
+
             ControllerTicket controllerTicket = new ControllerTicket();
             controllerTicket.register_ticket(ticket);
             out = "{\"response\":\"Insert Correct\"}\n";
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             out = String.format("{\"response\":\"Error to insert: %s\"}", e.getMessage());
         }
-        
+
         return Response.ok(out).build();
     }
     
-    
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
+   @PUT
+   @Produces(MediaType.APPLICATION_JSON)
     @Path("update_ticket")
-    public Response update(@QueryParam("idTicket") int idTicket, 
-                           @QueryParam("titulo") String titulo, 
+    public Response update(@QueryParam("idTicket") int idTicket,
+                           @QueryParam("titulo") String titulo,
                            @QueryParam("descripcion") String descripcion,
+                           @QueryParam("ubicacion") String ubicacion,
+                           @QueryParam("categoria") String categoria,
                            @QueryParam("prioridad") String prioridad,
                            @QueryParam("estado") String estado,
-                           @QueryParam("idUsuario") int idUsuario) {
-        
+                           @QueryParam("idAlumno") int idAlumno) {
+
         String out = "";
-        
+
         try {
             Timestamp fechaActualizacion = new Timestamp(System.currentTimeMillis());
-            
-            Ticket ticket = new Ticket(idTicket, titulo, descripcion, prioridad, estado, null, fechaActualizacion, idUsuario);
+
+            Ticket ticket = new Ticket(idTicket, titulo, descripcion, ubicacion, categoria, prioridad, estado, null, fechaActualizacion, idAlumno, 0);
+
             ControllerTicket controllerTicket = new ControllerTicket();
             controllerTicket.update_ticket(ticket);
             out = "{\"response\":\"Update Correct\"}\n";
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             out = String.format("{\"response\":\"Error to update: %s\"}", e.getMessage());
         }
-        
+
         return Response.ok(out).build();
     }
+
     
     
     @GET
@@ -81,7 +86,7 @@ public class RestTicket {
     @Path("get_ticket")
     public Response getTicketById(@QueryParam("idTicket") int idTicket) {
         String out = "";
-        
+
         try {
             ControllerTicket controllerTicket = new ControllerTicket();
             Ticket ticket = controllerTicket.get_ticket_by_id(idTicket);
@@ -94,7 +99,7 @@ public class RestTicket {
             e.printStackTrace();
             out = String.format("{\"response\":\"Error al obtener ticket: %s\"}", e.getMessage());
         }
-        
+
         return Response.ok(out).build();
     }
 
@@ -103,7 +108,7 @@ public class RestTicket {
     @Path("get_all_tickets")
     public Response getAllTickets() {
         String out = "";
-        
+
         try {
             ControllerTicket controllerTicket = new ControllerTicket();
             List<Ticket> tickets = controllerTicket.get_all_tickets();
@@ -112,16 +117,16 @@ public class RestTicket {
             e.printStackTrace();
             out = String.format("{\"response\":\"Error al obtener tickets: %s\"}", e.getMessage());
         }
-        
+
         return Response.ok(out).build();
     }
-    
+
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("delete_ticket")
     public Response deleteTicketById(@QueryParam("idTicket") int idTicket) {
         String out = "";
-        
+
         try {
             ControllerTicket controllerTicket = new ControllerTicket();
             boolean deleted = controllerTicket.delete_ticket(idTicket);
@@ -134,7 +139,7 @@ public class RestTicket {
             e.printStackTrace();
             out = String.format("{\"response\":\"Error al eliminar ticket: %s\"}", e.getMessage());
         }
-        
+
         return Response.ok(out).build();
     }
 }

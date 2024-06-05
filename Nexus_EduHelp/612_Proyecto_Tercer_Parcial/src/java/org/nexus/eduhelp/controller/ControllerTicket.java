@@ -11,7 +11,7 @@ import org.nexus.eduhelp.model.Ticket;
 public class ControllerTicket {
 
     public Ticket register_ticket(Ticket t) {
-        String query = "INSERT INTO Tickets (Titulo, Descripcion, Prioridad, Estado, Fecha_Creacion, Fecha_Actualizacion, Id_Usuario) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Tickets (Titulo, Descripcion, Ubicacion, Categoria, Prioridad, Estado, Fecha_Creacion, Fecha_Actualizacion, Id_Alumno) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try {
             System.out.println("Estableciendo conexión con la base de datos...");
@@ -22,11 +22,13 @@ public class ControllerTicket {
             PreparedStatement pstm = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             pstm.setString(1, t.getTitulo());
             pstm.setString(2, t.getDescripcion());
-            pstm.setString(3, t.getPrioridad());
-            pstm.setString(4, t.getEstado());
-            pstm.setTimestamp(5, t.getFechaCreacion());
-            pstm.setTimestamp(6, t.getFechaActualizacion());
-            pstm.setInt(7, t.getIdUsuario());
+            pstm.setString(3, t.getUbicacion());
+            pstm.setString(4, t.getCategoria());
+            pstm.setString(5, t.getPrioridad());
+            pstm.setString(6, t.getEstado());
+            pstm.setTimestamp(7, t.getFechaCreacion());
+            pstm.setTimestamp(8, t.getFechaActualizacion());
+            pstm.setInt(9, t.getId_Alumno());
 
             System.out.println("Ejecutando consulta de inserción...");
             int affectedRows = pstm.executeUpdate();
@@ -57,7 +59,7 @@ public class ControllerTicket {
     }
     
     public Ticket update_ticket(Ticket t) {
-        String query = "UPDATE Tickets SET Titulo = ?, Descripcion = ?, Prioridad = ?, Estado = ?, Fecha_Actualizacion = ?, Id_Usuario = ? WHERE Id_Ticket = ?";
+        String query = "UPDATE Tickets SET Titulo = ?, Descripcion = ?, Ubicacion = ?, Categoria = ?, Prioridad = ?, Estado = ?, Fecha_Actualizacion = ? WHERE Id_Ticket = ?";
         
         try {
             System.out.println("Estableciendo conexión con la base de datos...");
@@ -68,11 +70,12 @@ public class ControllerTicket {
             PreparedStatement pstm = conn.prepareStatement(query);
             pstm.setString(1, t.getTitulo());
             pstm.setString(2, t.getDescripcion());
-            pstm.setString(3, t.getPrioridad());
-            pstm.setString(4, t.getEstado());
-            pstm.setTimestamp(5, t.getFechaActualizacion());
-            pstm.setInt(6, t.getIdUsuario());
-            pstm.setInt(7, t.getIdTicket());
+            pstm.setString(3, t.getUbicacion());
+            pstm.setString(4, t.getCategoria());
+            pstm.setString(5, t.getPrioridad());
+            pstm.setString(6, t.getEstado());
+            pstm.setTimestamp(7, t.getFechaActualizacion());
+            pstm.setInt(8, t.getIdTicket());
 
             System.out.println("Ejecutando consulta de actualización...");
             int affectedRows = pstm.executeUpdate();
@@ -112,11 +115,14 @@ public class ControllerTicket {
                     rs.getInt("Id_Ticket"),
                     rs.getString("Titulo"),
                     rs.getString("Descripcion"),
+                    rs.getString("Ubicacion"),
+                    rs.getString("Categoria"),
                     rs.getString("Prioridad"),
                     rs.getString("Estado"),
                     rs.getTimestamp("Fecha_Creacion"),
                     rs.getTimestamp("Fecha_Actualizacion"),
-                    rs.getInt("Id_Usuario")
+                    rs.getInt("Id_Alumno"),
+                    rs.getInt("Id_Tecnico")
                 );
             }
 
@@ -150,11 +156,15 @@ public class ControllerTicket {
                     rs.getInt("Id_Ticket"),
                     rs.getString("Titulo"),
                     rs.getString("Descripcion"),
+                    rs.getString("Ubicacion"),
+                    rs.getString("Categoria"),
                     rs.getString("Prioridad"),
                     rs.getString("Estado"),
                     rs.getTimestamp("Fecha_Creacion"),
                     rs.getTimestamp("Fecha_Actualizacion"),
-                    rs.getInt("Id_Usuario")
+                    rs.getInt("Id_Alumno"),
+                    rs.getInt("Id_Tecnico")
+
                 );
                 tickets.add(ticket);
             }
