@@ -14,6 +14,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import org.nexus.eduhelp.controller.ControllerUsuario;
 import org.nexus.eduhelp.model.Usuario;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Path("usuario")
 public class RestUsuario {
@@ -32,6 +34,13 @@ public class RestUsuario {
         String out = "";
         
         try {
+            // Decodificar los parámetros
+            nombre = URLDecoder.decode(nombre, StandardCharsets.UTF_8.name());
+            apellido = URLDecoder.decode(apellido, StandardCharsets.UTF_8.name());
+            correo = URLDecoder.decode(correo, StandardCharsets.UTF_8.name());
+            tipo = URLDecoder.decode(tipo, StandardCharsets.UTF_8.name());
+            contraseña = URLDecoder.decode(contraseña, StandardCharsets.UTF_8.name());
+
             ControllerUsuario controllerUser = new ControllerUsuario();
 
             // Obtener la última matrícula y asignar la siguiente
