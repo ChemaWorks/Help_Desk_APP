@@ -97,26 +97,34 @@ public class RestUsuario {
     
     
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("get_user")
-    public Response getUserById(@QueryParam("idUsuario") int idUsuario) {
-        String out = "";
-        
-        try {
-            ControllerUsuario controllerUser = new ControllerUsuario();
-            Usuario user = controllerUser.get_user_by_id(idUsuario);
-            if (user != null) {
-                out = new Gson().toJson(user);
-            } else {
-                out = "{\"response\":\"Usuario no encontrado\"}\n";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            out = String.format("{\"response\":\"Error al obtener usuario: %s\"}", e.getMessage());
+@Produces(MediaType.APPLICATION_JSON)
+@Path("get_user")
+public Response getUserById(@QueryParam("idUsuario") int idUsuario) {
+    String out = "";
+
+    try {
+        ControllerUsuario controllerUser = new ControllerUsuario();
+        ControllerTicket controllerTicket = new ControllerTicket();
+
+        Usuario user = controllerUser.get_user_by_id(idUsuario);
+        if (user != null) {
+            // Obtener los tickets del usuario
+            List<Ticket> tickets = controllerTicket.get_tickets_by_usuario(idUsuario);
+
+            JsonObject responseJson = new JsonObject();
+            responseJson.add("usuario", new Gson().toJsonTree(user));
+            responseJson.add("tickets", new Gson().toJsonTree(tickets));
+            out = new Gson().toJson(responseJson);
+        } else {
+            out = "{\"response\":\"Usuario no encontrado\"}\n";
         }
-        
-        return Response.ok(out).build();
+    } catch (Exception e) {
+        e.printStackTrace();
+        out = String.format("{\"response\":\"Error al obtener usuario: %s\"}", e.getMessage());
     }
+
+    return Response.ok(out).build();
+}
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -195,5 +203,23 @@ public class RestUsuario {
             out = String.format("{\"error\" : \"%s\"}", e.getMessage());
         }
         return Response.status(Response.Status.UNAUTHORIZED).entity(out).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("get_tickets_by_alumno")
+    public Response getTicketsByAlumno(@QueryParam("idAlumno") int idAlumno) {
+        String out = "";
+
+        try {
+            ControllerTicket controllerTicket = new ControllerTicket();
+            List<Ticket> tickets = controllerTicket.get_tickets_by_usuario(idAlumno);
+            out = new Gson().toJson(tickets);
+        } catch (Exception e) {
+            e.printStackTrace();
+            out = String.format("{\"response\":\"Error al obtener tickets: %s\"}", e.getMessage());
+        }
+
+        return Response.ok(out).build();
     }
 }
