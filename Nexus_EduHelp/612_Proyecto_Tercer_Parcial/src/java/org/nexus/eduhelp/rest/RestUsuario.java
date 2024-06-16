@@ -1,6 +1,7 @@
 package org.nexus.eduhelp.rest;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -10,12 +11,14 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.sql.Timestamp;
-import java.util.List;
-import org.nexus.eduhelp.controller.ControllerUsuario;
-import org.nexus.eduhelp.model.Usuario;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.util.List;
+import org.nexus.eduhelp.controller.ControllerTicket;
+import org.nexus.eduhelp.controller.ControllerUsuario;
+import org.nexus.eduhelp.model.Ticket;
+import org.nexus.eduhelp.model.Usuario;
 
 @Path("usuario")
 public class RestUsuario {
@@ -171,12 +174,17 @@ public class RestUsuario {
             System.out.println("Contraseña recibida: " + contraseña);
 
             ControllerUsuario cu = new ControllerUsuario();
+            ControllerTicket ct = new ControllerTicket();
             List<Usuario> usuarios = cu.get_all_users();
 
             for (Usuario usuario : usuarios) {
                 System.out.println("Comparando con usuario: " + usuario.getCorreo());
                 if (usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(contraseña)) {
-                    out = new Gson().toJson(usuario);
+                    List<Ticket> tickets = ct.get_tickets_by_usuario(usuario.getIdUsuario());
+                    JsonObject responseJson = new JsonObject();
+                    responseJson.add("usuario", new Gson().toJsonTree(usuario));
+                    responseJson.add("tickets", new Gson().toJsonTree(tickets));
+                    out = new Gson().toJson(responseJson);
                     return Response.ok(out).build();
                 }
             }
