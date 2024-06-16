@@ -2,7 +2,6 @@ package org.nexus.eduhelp.rest;
 
 import com.google.gson.Gson;
 import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -18,6 +17,9 @@ import org.nexus.eduhelp.model.Usuario;
 
 @Path("usuario")
 public class RestUsuario {
+
+    private static final int BASE_MATRICULA = 70000;
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("register_user")
@@ -25,17 +27,21 @@ public class RestUsuario {
                          @QueryParam("apellido") String apellido,
                          @QueryParam("correo") String correo,
                          @QueryParam("tipo") String tipo,
-                         @QueryParam("contraseña") String contraseña,
-                         @QueryParam("matricula") int matricula){
+                         @QueryParam("contraseña") String contraseña){
         
         String out = "";
         
         try {
+            ControllerUsuario controllerUser = new ControllerUsuario();
+
+            // Obtener la última matrícula y asignar la siguiente
+            int ultimaMatricula = controllerUser.getUltimaMatricula();
+            int nuevaMatricula = (ultimaMatricula < BASE_MATRICULA) ? BASE_MATRICULA : ultimaMatricula + 1;
+
             Timestamp fechaCreacion = new Timestamp(System.currentTimeMillis());
             Timestamp fechaActualizacion = fechaCreacion;
             
-            Usuario user = new Usuario(0, nombre, apellido, correo, tipo, contraseña, matricula, fechaCreacion, fechaActualizacion);
-            ControllerUsuario controllerUser = new ControllerUsuario();
+            Usuario user = new Usuario(0, nombre, apellido, correo, tipo, contraseña, nuevaMatricula, fechaCreacion, fechaActualizacion);
             controllerUser.register_user(user);
             out = "{\"response\":\"Insert Correct\"}\n";
             

@@ -218,6 +218,24 @@ public class ControllerUsuario {
         return deleted;
     }
     
+    public int getUltimaMatricula() throws SQLException {
+        int ultimaMatricula = 0;
+        String query = "SELECT MAX(Matricula) AS ultimaMatricula FROM Usuarios";
+        
+        try (Connection conn = new ConnectionMysql().open();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                ultimaMatricula = rs.getInt("ultimaMatricula");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        
+        return ultimaMatricula;
+    }
+
     private static final String[] VALID_USER_TYPES = {"Admin", "Alumno", "Técnico"};
 
     private boolean isValidUserType(String tipo) {
