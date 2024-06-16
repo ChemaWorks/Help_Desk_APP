@@ -176,7 +176,7 @@ public class RestUsuario {
             for (Usuario usuario : usuarios) {
                 System.out.println("Comparando con usuario: " + usuario.getCorreo());
                 if (usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(contraseña)) {
-                    out = String.format("{\"idUsuario\" : \"%d\"}", usuario.getIdUsuario());
+                    out = new Gson().toJson(usuario);
                     return Response.ok(out).build();
                 }
             }
