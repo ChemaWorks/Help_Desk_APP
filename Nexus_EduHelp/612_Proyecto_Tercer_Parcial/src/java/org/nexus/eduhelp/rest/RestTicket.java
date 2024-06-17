@@ -48,8 +48,8 @@ public class RestTicket {
         return Response.ok(out).build();
     }
     
-   @PUT
-   @Produces(MediaType.APPLICATION_JSON)
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("update_ticket")
     public Response update(@QueryParam("idTicket") int idTicket,
                            @QueryParam("titulo") String titulo,
@@ -58,14 +58,16 @@ public class RestTicket {
                            @QueryParam("categoria") String categoria,
                            @QueryParam("prioridad") String prioridad,
                            @QueryParam("estado") String estado,
-                           @QueryParam("idAlumno") int idAlumno) {
+                           @QueryParam("idAlumno") int idAlumno,
+                           @QueryParam("idTecnico") Integer idTecnico) { // Cambiado a Integer
 
         String out = "";
 
         try {
             Timestamp fechaActualizacion = new Timestamp(System.currentTimeMillis());
 
-            Ticket ticket = new Ticket(idTicket, titulo, descripcion, ubicacion, categoria, prioridad, estado, null, fechaActualizacion, idAlumno, 0);
+            // Asegúrate de que el constructor de Ticket acepte idTecnico como Integer
+            Ticket ticket = new Ticket(idTicket, titulo, descripcion, ubicacion, categoria, prioridad, estado, null, fechaActualizacion, idAlumno, idTecnico);
 
             ControllerTicket controllerTicket = new ControllerTicket();
             controllerTicket.update_ticket(ticket);
@@ -78,6 +80,7 @@ public class RestTicket {
 
         return Response.ok(out).build();
     }
+
 
     
     

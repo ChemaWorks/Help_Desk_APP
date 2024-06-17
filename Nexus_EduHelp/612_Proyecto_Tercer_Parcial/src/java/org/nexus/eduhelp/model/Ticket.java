@@ -13,9 +13,9 @@ public class Ticket {
     private Timestamp fechaCreacion;
     private Timestamp fechaActualizacion;
     private int Id_Alumno;
-    private int Id_Tecnico;
+    private Integer Id_Tecnico;
 
-    public Ticket(int idTicket, String titulo, String descripcion, String ubicacion, String Categoria, String prioridad, String Estado, Timestamp fechaCreacion, Timestamp fechaActualizacion, int Id_Alumno, int Id_Tecnico) {
+    public Ticket(int idTicket, String titulo, String descripcion, String ubicacion, String Categoria, String prioridad, String Estado, Timestamp fechaCreacion, Timestamp fechaActualizacion, int Id_Alumno, Integer Id_Tecnico) {
         this.idTicket = idTicket;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -114,11 +114,11 @@ public class Ticket {
         this.Categoria = Categoria;
     }
 
-    public int getId_Tecnico() {
+    public Integer getId_Tecnico() {
         return Id_Tecnico;
     }
 
-    public void setId_Tecnico(int Id_Tecnico) {
+    public void setId_Tecnico(Integer Id_Tecnico) {
         this.Id_Tecnico = Id_Tecnico;
     }
     

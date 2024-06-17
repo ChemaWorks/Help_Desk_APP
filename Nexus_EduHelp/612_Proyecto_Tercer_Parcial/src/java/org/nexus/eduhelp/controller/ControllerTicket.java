@@ -59,42 +59,55 @@ public class ControllerTicket {
     }
     
     public Ticket update_ticket(Ticket t) {
-        String query = "UPDATE Tickets SET Titulo = ?, Descripcion = ?, Ubicacion = ?, Categoria = ?, Prioridad = ?, Estado = ?, Fecha_Actualizacion = ? WHERE Id_Ticket = ?";
+    StringBuilder query = new StringBuilder("UPDATE Tickets SET Titulo = ?, Descripcion = ?, Ubicacion = ?, Categoria = ?, Prioridad = ?, Estado = ?, Fecha_Actualizacion = ?");
+    
+    if (t.getId_Tecnico() != null) {
+        query.append(", Id_Tecnico = ?");
+    }
+    
+    query.append(" WHERE Id_Ticket = ?");
+    
+    try {
+        System.out.println("Estableciendo conexión con la base de datos...");
+        ConnectionMysql connMysql = new ConnectionMysql();
+        Connection conn = connMysql.open();
+        System.out.println("Conexión establecida.");
+
+        PreparedStatement pstm = conn.prepareStatement(query.toString());
+        pstm.setString(1, t.getTitulo());
+        pstm.setString(2, t.getDescripcion());
+        pstm.setString(3, t.getUbicacion());
+        pstm.setString(4, t.getCategoria());
+        pstm.setString(5, t.getPrioridad());
+        pstm.setString(6, t.getEstado());
+        pstm.setTimestamp(7, t.getFechaActualizacion());
         
-        try {
-            System.out.println("Estableciendo conexión con la base de datos...");
-            ConnectionMysql connMysql = new ConnectionMysql();
-            Connection conn = connMysql.open();
-            System.out.println("Conexión establecida.");
-
-            PreparedStatement pstm = conn.prepareStatement(query);
-            pstm.setString(1, t.getTitulo());
-            pstm.setString(2, t.getDescripcion());
-            pstm.setString(3, t.getUbicacion());
-            pstm.setString(4, t.getCategoria());
-            pstm.setString(5, t.getPrioridad());
-            pstm.setString(6, t.getEstado());
-            pstm.setTimestamp(7, t.getFechaActualizacion());
-            pstm.setInt(8, t.getIdTicket());
-
-            System.out.println("Ejecutando consulta de actualización...");
-            int affectedRows = pstm.executeUpdate();
-            System.out.println("Filas afectadas: " + affectedRows);
-
-            if (affectedRows == 0) {
-                throw new SQLException("La actualización del ticket falló, no se afectaron filas.");
-            }
-
-            pstm.close();
-            conn.close();
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error: " + e.getMessage());
+        int index = 8;
+        if (t.getId_Tecnico() != null) {
+            pstm.setInt(index++, t.getId_Tecnico());
         }
         
-        return t;
+        pstm.setInt(index, t.getIdTicket());
+
+        System.out.println("Ejecutando consulta de actualización...");
+        int affectedRows = pstm.executeUpdate();
+        System.out.println("Filas afectadas: " + affectedRows);
+
+        if (affectedRows == 0) {
+            throw new SQLException("La actualización del ticket falló, no se afectaron filas.");
+        }
+
+        pstm.close();
+        conn.close();
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+        System.out.println("Error: " + e.getMessage());
     }
+    
+    return t;
+}
+
     
     public Ticket get_ticket_by_id(int idTicket) {
         String query = "SELECT * FROM Tickets WHERE Id_Ticket = ?";
