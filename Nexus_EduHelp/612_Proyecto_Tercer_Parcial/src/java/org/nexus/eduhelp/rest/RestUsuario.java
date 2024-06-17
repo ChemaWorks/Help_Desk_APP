@@ -222,4 +222,22 @@ public Response getUserById(@QueryParam("idUsuario") int idUsuario) {
 
         return Response.ok(out).build();
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("get_tickets_by_tecnico")
+    public Response getTicketsByTecnico(@QueryParam("idTecnico") int idTecnico) {
+        String out = "";
+
+        try {
+            ControllerTicket controllerTicket = new ControllerTicket();
+            List<Ticket> tickets = controllerTicket.get_tickets_by_tecnico(idTecnico);
+            out = new Gson().toJson(tickets);
+        } catch (Exception e) {
+            e.printStackTrace();
+            out = String.format("{\"response\":\"Error al obtener tickets: %s\"}", e.getMessage());
+        }
+
+        return Response.ok(out).build();
+    }
 }

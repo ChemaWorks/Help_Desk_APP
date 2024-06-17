@@ -268,4 +268,47 @@ public class ControllerTicket {
         
         return tickets;
     }
+    
+    public List<Ticket> get_tickets_by_tecnico(int idUsuario) {
+        String query = "SELECT * FROM Tickets WHERE Id_Tecnico = ?";
+        List<Ticket> tickets = new ArrayList<>();
+        
+        try {
+            System.out.println("Estableciendo conexión con la base de datos...");
+            ConnectionMysql connMysql = new ConnectionMysql();
+            Connection conn = connMysql.open();
+            System.out.println("Conexión establecida.");
+
+            PreparedStatement pstm = conn.prepareStatement(query);
+            pstm.setInt(1, idUsuario);
+            
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                Ticket ticket = new Ticket(
+                    rs.getInt("Id_Ticket"),
+                    rs.getString("Titulo"),
+                    rs.getString("Descripcion"),
+                    rs.getString("Ubicacion"),
+                    rs.getString("Categoria"),
+                    rs.getString("Prioridad"),
+                    rs.getString("Estado"),
+                    rs.getTimestamp("Fecha_Creacion"),
+                    rs.getTimestamp("Fecha_Actualizacion"),
+                    rs.getInt("Id_Alumno"),
+                    rs.getInt("Id_Tecnico")
+                );
+                tickets.add(ticket);
+            }
+
+            rs.close();
+            pstm.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return tickets;
+    }
 }
